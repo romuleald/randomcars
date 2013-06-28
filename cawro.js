@@ -51,7 +51,7 @@ var doSleep = true;
 
 var world;
 
-var zoom = 70;
+var zoom = 50;
 
 var maxFloorTiles = 200;
 var cw_floorTiles = new Array();
@@ -84,6 +84,8 @@ var cw_ghostReplayInterval = null;
 var distanceMeter = document.getElementById("distancemeter");
 
 var leaderPosition = new Object();
+var last_distance = 0;
+var last_time = new Date().getTime();
 leaderPosition.x = 0;
 leaderPosition.y = 0;
 
@@ -98,13 +100,18 @@ function debug(str, clear) {
 }
 
 function showDistance(distance, height) {
-  distanceMeter.innerHTML = "distance: "+distance+" meters<br />";
-  distanceMeter.innerHTML += "height: "+height+" meters";
-  //minimarkerdistance.left = Math.round((distance + 5) * minimapscale) + "px";
-  if(distance > minimapfogdistance) {
-    fogdistance.width = 800 - Math.round(distance + 15) * minimapscale + "px";
-    minimapfogdistance = distance;
-  }
+    var time = new Date().getTime();
+    var speed = Math.round(((distance - last_distance)) / (time - last_time) * 10000 * 3.6) / 10;
+    distanceMeter.innerHTML = "distance: "+distance+" meters<br />";
+    distanceMeter.innerHTML += "height: "+height+" meters<br />";
+    distanceMeter.innerHTML += "speed: "+(speed)+" km/h";
+    last_distance = distance;
+    last_time = time;
+    //minimarkerdistance.left = Math.round((distance + 5) * minimapscale) + "px";
+    if(distance > minimapfogdistance) {
+        fogdistance.width = 800 - Math.round(distance + 15) * minimapscale + "px";
+        minimapfogdistance = distance;
+    }
 }
 
 /* ========================================================================= */
@@ -704,6 +711,11 @@ function cw_drawCars() {
     ctx.stroke();
   }
 }
+
+var changezoom = function (button) {
+    if (debug)console.info('changezoom');
+    zoom = button.value >> 0;
+};
 
 function toggleDisplay() {
   if(cw_paused) {
