@@ -6,7 +6,7 @@ function ghost_create_replay() {
 
   return {
     num_frames : 0,
-    frames     : [],
+    frames     : []
   }
 }
 

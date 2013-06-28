@@ -1016,6 +1016,20 @@ function cw_confirmResetWorld() {
 
 // ghost replay stuff
 
+var togglePause = function (button) {
+    if (debug)console.info('togglePause');
+    var value = '';
+    if(cw_paused){
+        cw_resumeSimulation();
+        value = 'pause';
+    }
+    else{
+        cw_pauseSimulation();
+        value = 'play';
+    }
+    button.value = value;
+
+};
 function cw_pauseSimulation() {
   cw_paused = true;
   clearInterval(cw_runningInterval);
